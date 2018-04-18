@@ -14,12 +14,15 @@ import xlrd
 myfile = pd.ExcelFile('Field_Restoration.xlsx')
 mydata = pd.ExcelFile(myfile)
 
-#printing out all the sheet names in the excel file
+#printing out the sheet names in the excel file
 print(mydata.sheet_names)
 
-#extracting data from the first sheet as a dataframe
-dataframe = myfile.parse('Mammals')
-print(dataframe)
+#extracting data from NonMammals sheet for dataframe
+nonmammal = myfile.parse('NonMammal')
+df = pd.DataFrame(nonmammal)
+groups = df.groupby("site.type")
+print(groups.count())
 
-dataframe = myfile.parse('NonMammal')
-print(dataframe)
+#extracting data from Mammals sheet for dataframe
+dataframe = myfile.parse('Mammals')
+#print(dataframe)
