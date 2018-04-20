@@ -27,11 +27,45 @@ print(dataframe)
 dataframe = myfile.parse('NonMammal')
 
 def runTestOnAll(dataFrame):
-    categories = list(dataframe.columns.values)
+    categories = list(dataFrame.columns.values)
+    reducedCategories = []
     for cat in categories:
         if cat != "site.type" and cat != "site" and cat != "station":
             testResults = anovaTest(dataFrame, cat)
+            #INSERT CODE TO CHECK IF FVALUE & PVALUE PASS
+            #IF THEY PASS APPEND 'cat' TO reducedCategories
             print(cat + ": F-value = " + str(testResults.statistic) + " P-value = " + str(testResults.pvalue))
+
+    for cat in reducedCategories:
+        pairedTTest(dataFrame, cat)
+
+    return
+
+def pairedTTest(dataFrame, category):
+    reducedDF = dataFrame[['site.type', category]]
+    
+    dArray = []
+    rArray = []
+    iArray = []
+    for index, row in reducedDF.iterrows():
+        site = row['site.type']
+        val = row[category]
+        if site== 'D':
+            dArray.append(val)
+        elif site == 'R':
+            rArray.append(val)
+        elif site == 'I':
+            iArray.append(val)
+        else:
+            print("ERROR\n")
+
+    t1 = stats.ttest_rel(dArray, iArray)
+    t2 = stats.ttest_rel(dArray, rArray)
+    t3 = stats.ttest_rel(iArray, rArray)
+    #TODO: INSERT CODE TO CHECK IF RESULTS ARE SIGNIFICANT
+    #IF THEY ARE, CREATE A PRINT STATEMENT EXPLAINING WHY
+    print(t1 + "\n" + t2 + "\n" + t3)
+
     return
 
 def anovaTest(dataFrame, category):
