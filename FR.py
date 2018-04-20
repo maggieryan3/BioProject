@@ -61,5 +61,15 @@ runTestOnAll(dataframe)
 #n = anovaTest(dataframe, "av.bac")
 
 
+#printing out the sheet names in the excel file
+print(mydata.sheet_names)
 
+#extracting data from NonMammals sheet for dataframe
+nonmammal = myfile.parse('NonMammal')
+df = pd.DataFrame(nonmammal)
+groups = df.groupby("site.type")
+print(groups.count())
 
+#extracting data from Mammals sheet for dataframe
+dataframe = myfile.parse('Mammals')
+#print(dataframe)
