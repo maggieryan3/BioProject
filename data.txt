@@ -1,0 +1,14 @@
+vegetation:
+nearest - how closely clustered veg
+shrubs
+.grnd
+
+insects:
+
+nematodes:
+av.
+
+soil characteristics:
+org
+
+How do nematodes cluster and what characteristics do the different types of nematodes prefer
