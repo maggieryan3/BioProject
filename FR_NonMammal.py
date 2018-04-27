@@ -27,18 +27,21 @@ def runTestOnAll(dataFrame):
                 reducedCategories.append(testResults)
             #print(cat + ": F-value = " + str(testResults.statistic) + " P-value = " + str(testResults.pvalue))
     print("______________ANOVA COMPLETE, TTEST STARTING__________")
+    passCount = 0
     for cat in reducedCategories:
-        tTest(dataFrame, cat)
+        passCount += tTest(dataFrame, cat)
     print("______________TTEST COMPLETE___________________________")
+    print("Number of tests passed: " + passCount)
     return
 
 def tchecker(type1, type2, pval, cat):
     strength = .05
     if pval < strength:
         print("PASS - Since the pvalue of " + str(pval) + " is less than " + str(strength) + ", we are " + str(100 - (strength*100)) + "% confident that there is a statistical significance between sites: " + type1 + " and " + type2 + " for " + cat)
+        return 1
     else:
         print("FAIL - Since the p-value of " + str(pval) + " is greater than " + str(strength) + " we cannot say there is a significance difference between sites: " + type1 + " and " + type2 + " for " + cat)
-    return
+        return 0
 
 def tTest(dataFrame, category):
     
@@ -58,15 +61,15 @@ def tTest(dataFrame, category):
             iArray.append(val)
         else:
             print("ERROR\n")
-
+            
     t1 = stats.ttest_ind(dArray, iArray, equal_var = False)
-    tchecker("degrated", "intact", t1.pvalue, category)
+    temp = tchecker("degrated", "intact", t1.pvalue, category)
     t2 = stats.ttest_ind(dArray, rArray, equal_var = False)
-    tchecker("degrated", "restored", t2.pvalue, category)
+    temp = tchecker("degrated", "restored", t2.pvalue, category)
     t3 = stats.ttest_ind(iArray, rArray, equal_var = False)
-    tchecker("intact", "restored", t3.pvalue, category)
+    temp = tchecker("intact", "restored", t3.pvalue, category)
 
-    return
+    return temp
 
 def anovaTest(dataFrame, category):
 
