@@ -17,6 +17,8 @@ mydata = pd.ExcelFile(myfile)
 dataframe = myfile.parse('NonMammal')
 
 def runTestOnAll(dataFrame):
+    file = open("results.txt", "w")
+    file.write("RESULTS\n")
     categories = list(dataFrame.columns.values)
     reducedCategories = []
     print("_______________ANOVA TEST STARTING____________________")
@@ -28,11 +30,17 @@ def runTestOnAll(dataFrame):
             #print(cat + ": F-value = " + str(testResults.statistic) + " P-value = " + str(testResults.pvalue))
     print("______________ANOVA COMPLETE, TTEST STARTING__________")
     passCount = 0
+    file.write("TTEST: The following passed a ttest with a p-value greater than 0.05, meaning that we are 95% confident that there is a statistical significance.\n")
+    file.close()
     for cat in reducedCategories:
         passCount += tTest(dataFrame, cat)
     print("Number of tests passed: " + str(passCount))
+    file = open("results.txt", "a")
+    file.write("Number of tests passed: " + str(passCount)+"\n")
     print("________TTEST COMPLETE, CORRELATION TEST STARTING_______")
     nematodes = dataFrame[['nem.total.av']]
+    file.write("\n\nThe following results will tell us which variables have a certain effect on the number of nematodes and how they cluster.\n")
+    file.close()
     for cat in categories:
         if cat != "site.type" and cat != "site" and cat != "station" and cat != "nem.total.av":
             correlationTest(nematodes, cat, dataFrame)
@@ -42,11 +50,16 @@ def runTestOnAll(dataFrame):
 
 def tchecker(type1, type2, pval, cat):
     strength = .05
+    file = open("results.txt", "a")
     if pval < strength:
+        
         print("PASS - Since the pvalue of " + str(pval) + " is less than " + str(strength) + ", we are " + str(100 - (strength*100)) + "% confident that there is a statistical significance between sites: " + type1 + " and " + type2 + " for " + cat)
+        file.write("PASS - " + cat + " for " + type1 + " vs. " + type2+"\n")
+        file.close()
         return 1
     else:
         print("FAIL - Since the p-value of " + str(pval) + " is greater than " + str(strength) + " we cannot say there is a significance difference between sites: " + type1 + " and " + type2 + " for " + cat)
+        file.close()
         return 0
 
 def tTest(dataFrame, category):
@@ -111,21 +124,29 @@ This function tests the correlation between nematodes and other variables
 in order to see how nematodes cluster, using Spearman's correlation.
 '''
 def correlationTest(list, category, dataFrame):
+    file = open("results.txt", "a")
     reducedDF = dataFrame[[category]]
     spearman = stats.spearmanr(list, reducedDF)
     if spearman.pvalue <= 0.05: #only consider statistically significant ones
         if spearman.correlation > .79:
             print("There is a VERY STRONG POSITIVE correlation between the number of nematodes and " + category + " Correlation = " + str(spearman.correlation))
+            file.write("There is a VERY STRONG POSITIVE correlation between the number of nematodes and " + category + " Correlation = " + str(spearman.correlation)+"\n")
         elif spearman.correlation > .59:
             print("There is a STRONG POSITIVE correlation between the number of nematodes and " + category + " Correlation = " + str(spearman.correlation))
+            file.write("There is a STRONG POSITIVE correlation between the number of nematodes and " + category + " Correlation = " + str(spearman.correlation)+"\n")
         elif spearman.correlation > .39:
             print("There is a MODERATE POSITIVE correlation between the number of nematodes and " + category + " Correlation = " + str(spearman.correlation))
+            file.write("There is a MODERATE POSITIVE correlation between the number of nematodes and " + category + " Correlation = " + str(spearman.correlation)+"\n")
         elif spearman.correlation < -.79:
             print("There is a VERY STRONG NEGATIVE correlation between the number of nematodes and " + category + " Correlation = " + str(spearman.correlation))
+            file.write("There is a VERY STRONG NEGATIVE correlation between the number of nematodes and " + category + " Correlation = " + str(spearman.correlation)+"\n")
         elif spearman.correlation < -.59:
             print("There is a STRONG NEGATIVE correlation between the number of nematodes and " + category + " Correlation = " + str(spearman.correlation))
+            file.write("There is a STRONG NEGATIVE correlation between the number of nematodes and " + category + " Correlation = " + str(spearman.correlation)+"\n")
         elif spearman.correlation < -.39:
             print("There is a MODERATE NEGATIVE correlation between the number of nematodes and " + category + " Correlation = " + str(spearman.correlation))
+            file.write("There is a MODERATE NEGATIVE correlation between the number of nematodes and " + category + " Correlation = " + str(spearman.correlation)+"\n")
+    file.close()
     return
 
 #MAIN

@@ -1,0 +1,29 @@
+RESULTS
+TTEST: The following passed a ttest with a p-value greater than 0.05, meaning that we are 95% confident that there is a statistical significance.
+PASS - av.fun for degrated vs. restored
+PASS - av.fun for intact vs. restored
+PASS - org.top for degrated vs. intact
+PASS - org.top for degrated vs. restored
+PASS - org.top for intact vs. restored
+PASS - inv.pct for degrated vs. intact
+PASS - inv.pct for intact vs. restored
+PASS - nearest.tree.shrub for degrated vs. intact
+PASS - nearest.tree.shrub for degrated vs. restored
+PASS - nearest.tree.shrub for intact vs. restored
+PASS - low.cvr for degrated vs. restored
+PASS - low.cvr for intact vs. restored
+PASS - shrbs for degrated vs. intact
+PASS - cwd for degrated vs. intact
+PASS - cwd for intact vs. restored
+PASS - shrb.num for degrated vs. intact
+PASS - shrb.num for degrated vs. restored
+PASS - avg.temp.c for degrated vs. intact
+PASS - avg.temp.c for degrated vs. restored
+PASS - avg.temp.c for intact vs. restored
+PASS - spiders for degrated vs. restored
+PASS - spiders for intact vs. restored
+Number of tests passed: 22
+
+
+The following results will tell us which variables have a certain effect on the number of nematodes and how they cluster.
+There is a MODERATE POSITIVE correlation between the number of nematodes and av.her Correlation = 0.5383603714838868
